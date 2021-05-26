@@ -4,6 +4,42 @@ import PortfolioContainer from './PortfolioContainer'
 import SearchBar from '../components/SearchBar'
 
 class MainContainer extends Component {
+  state ={
+    stocksArr: [],
+    portfolioArr: [],
+  }
+
+  componentDidMount(){
+    fetch('http://localhost:3000/stocks')
+      .then(res=> res.json())
+      .then(stocksArr=>{
+        this.setState({
+          stocksArr: stocksArr
+        })
+      })
+  }
+
+
+
+  buyStock = (stock) =>{
+    if(!this.state.portfolioArr.includes(stock)){
+      let newPortfolioArr = [...this.state.portfolioArr, stock]
+      this.setState({
+        portfolioArr: newPortfolioArr
+      })
+    } else{
+      alert('You can not add that twice!')
+    }
+  }
+
+  sellStock = (stock)=>{
+    let portfolioCopy = this.state.portfolioArr.filter(portfolioStock => {
+      return portfolioStock.id !== stock.id
+    })
+    this.setState({
+      portfolioArr: portfolioCopy
+    })
+  }
 
   render() {
     return (
@@ -13,12 +49,12 @@ class MainContainer extends Component {
           <div className="row">
             <div className="col-8">
 
-              <StockContainer/>
+              <StockContainer stocksArr={this.state.stocksArr} buyStock={this.buyStock}/>
 
             </div>
             <div className="col-4">
 
-              <PortfolioContainer/>
+              <PortfolioContainer portfolioArr={this.state.portfolioArr} sellStock={this.sellStock}/>
 
             </div>
           </div>
