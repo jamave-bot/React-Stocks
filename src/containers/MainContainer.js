@@ -7,6 +7,7 @@ class MainContainer extends Component {
   state ={
     stocksArr: [],
     portfolioArr: [],
+    filterTerm: 'Tech',
   }
 
   componentDidMount(){
@@ -14,7 +15,7 @@ class MainContainer extends Component {
       .then(res=> res.json())
       .then(stocksArr=>{
         this.setState({
-          stocksArr: stocksArr
+          stocksArr: stocksArr,
         })
       })
   }
@@ -41,15 +42,27 @@ class MainContainer extends Component {
     })
   }
 
+  setFilter = (newFilterTerm)=>{
+    this.setState({
+      filterTerm: newFilterTerm
+    })
+  }
+
   render() {
+
+    let filteredStocks;
+    filteredStocks= [...this.state.stocksArr].filter(stock =>{
+      return stock.type === this.state.filterTerm
+    })
+
     return (
       <div>
-        <SearchBar/>
+        <SearchBar setFilter={this.setFilter}/>
 
           <div className="row">
             <div className="col-8">
 
-              <StockContainer stocksArr={this.state.stocksArr} buyStock={this.buyStock}/>
+              <StockContainer stocksArr={filteredStocks} buyStock={this.buyStock}/>
 
             </div>
             <div className="col-4">

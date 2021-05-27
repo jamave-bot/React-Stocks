@@ -7,9 +7,9 @@ const Stock = (props) => {
   // }
 
   
-  return <div onClick={()=> props.handleStock(props.stock)}>
+  return <div>
 
-    <div className="card">
+    <div className="card" onClick={()=> props.handleStock(props.stock)}>
       <div className="card-body">
         <h5 className="card-title">{
             //Company Name
